@@ -1,32 +1,52 @@
+#!/usr/bin/env php
 <?php
 
-namespace App\Models;
+define('LARAVEL_START', microtime(true));
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Laravel\Sanctum\HasApiTokens;
+/*
+|--------------------------------------------------------------------------
+| Register The Auto Loader
+|--------------------------------------------------------------------------
+|
+| Composer provides a convenient, automatically generated class loader for
+| our application. We just need to utilize it! We'll simply require it
+| into the script here so that we don't have to worry about manual loading.
+|
+*/
 
-class Admin extends Authenticatable
-{
-    use HasApiTokens, HasFactory;
+require __DIR__.'/vendor/autoload.php';
 
-    protected $table = 'tbl_admin';
-    protected $primaryKey = 'id_admin';
-    
-    protected $fillable = [
-        'nama_admin',
-        'email',
-        'kata_sandi',
-        'created_at',
-        'updated_at',
-    ];
+$app = require_once __DIR__.'/bootstrap/app.php';
 
-    protected $hidden = [
-        'kata_sandi',
-    ];
+/*
+|--------------------------------------------------------------------------
+| Run The Artisan Application
+|--------------------------------------------------------------------------
+|
+| When we run the console application, the current CLI command will be
+| executed in this console and the response sent back to a terminal or
+| to another output writer for simple writing.
+|
+*/
 
-    public function getAuthPassword()
-    {
-        return $this->kata_sandi;
-    }
-}
+$kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
+
+$status = $kernel->handle(
+    $input = new Symfony\Component\Console\Input\ArgvInput,
+    new Symfony\Component\Console\Output\ConsoleOutput
+);
+
+/*
+|--------------------------------------------------------------------------
+| Shutdown The Application
+|--------------------------------------------------------------------------
+|
+| Once Artisan has finished running, we will fire off the shutdown procedures
+| so that any clean-up required can be done. Then, we'll exit the runner
+| with the completed status code.
+|
+*/
+
+$kernel->terminate($input, $status);
+
+exit($status);
