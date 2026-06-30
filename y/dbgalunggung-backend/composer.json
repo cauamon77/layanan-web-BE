@@ -1,5 +1,5 @@
 {
-    "name": "dbgalunggung-backend",
+    "name": "dbgalunggung/backend",
     "description": "Backend API for Gunung Galunggung tourism system",
     "type": "project",
     "require": {
